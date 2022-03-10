@@ -60,6 +60,9 @@
 #
 # List of providers and their preference orders (see above):
 #
+#ifdef solaris
+security.provider.tbd=SunPKCS11 ${java.home}/conf/security/sunpkcs11-solaris.cfg
+#endif
 security.provider.tbd=SUN
 security.provider.tbd=SunRsaSign
 security.provider.tbd=SunEC
@@ -79,8 +82,6 @@ security.provider.tbd=Apple
 #endif
 #ifndef solaris
 security.provider.tbd=SunPKCS11
-#else
-security.provider.tbd=SunPKCS11 ${java.home}/conf/security/sunpkcs11-solaris.cfg
 #endif
 
 #
