@@ -633,7 +633,12 @@ JVM_handle_solaris_signal(int sig, siginfo_t* info, void* ucVoid,
     return false;
   }
 
-  if (!os::Solaris::libjsig_is_loaded) {
+  /*
+   * FIXME: libjsig_is_loaded has been moved to PosixSignals but is
+   * not visible. But what does this code do anyway? I can find no
+   * analogues to this code in any other os_cpu files
+   *
+  if (!PosixSignals::libjsig_is_loaded) {
     struct sigaction oldAct;
     sigaction(sig, (struct sigaction *)0, &oldAct);
     if (oldAct.sa_sigaction != signalHandler) {
@@ -642,6 +647,7 @@ JVM_handle_solaris_signal(int sig, siginfo_t* info, void* ucVoid,
       warning("Unexpected Signal %d occurred under user-defined signal handler %#lx", sig, (long)sighand);
     }
   }
+  */
 
   if (pc == NULL && uc != NULL) {
     pc = (address) uc->uc_mcontext.gregs[REG_PC];
