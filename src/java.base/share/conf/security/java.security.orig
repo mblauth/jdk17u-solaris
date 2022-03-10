@@ -60,6 +60,9 @@
 #
 # List of providers and their preference orders (see above):
 #
+#ifdef solaris
+security.provider.tbd=SunPKCS11 ${java.home}/conf/security/sunpkcs11-solaris.cfg
+#endif
 security.provider.tbd=SUN
 security.provider.tbd=SunRsaSign
 security.provider.tbd=SunEC
@@ -79,8 +82,6 @@ security.provider.tbd=Apple
 #endif
 #ifndef solaris
 security.provider.tbd=SunPKCS11
-#else
-security.provider.tbd=SunPKCS11 ${java.home}/conf/security/sunpkcs11-solaris.cfg
 #endif
 
 #
@@ -562,7 +563,7 @@ sun.security.krb5.maxReferrals=5
 # can be included in the disabledAlgorithms properties.  These properties are
 # to help manage common actions easier across multiple disabledAlgorithm
 # properties.
-# There is one defined security property:  jdk.disabled.namedCurves
+# There is one defined security property:  jdk.disabled.NamedCurves
 # See the property for more specific details.
 #
 #
@@ -638,8 +639,7 @@ sun.security.krb5.maxReferrals=5
 #
 #
 jdk.certpath.disabledAlgorithms=MD2, MD5, SHA1 jdkCA & usage TLSServer, \
-    RSA keySize < 1024, DSA keySize < 1024, EC keySize < 224, \
-    SHA1 usage SignedJAR & denyAfter 2019-01-01
+    RSA keySize < 1024, DSA keySize < 1024, EC keySize < 224
 
 #
 # Legacy algorithms for certification path (CertPath) processing and
@@ -703,7 +703,7 @@ jdk.security.legacyAlgorithms=SHA1, \
 # See "jdk.certpath.disabledAlgorithms" for syntax descriptions.
 #
 jdk.jar.disabledAlgorithms=MD2, MD5, RSA keySize < 1024, \
-      DSA keySize < 1024, SHA1 denyAfter 2019-01-01
+      DSA keySize < 1024
 
 #
 # Algorithm restrictions for Secure Socket Layer/Transport Layer Security
