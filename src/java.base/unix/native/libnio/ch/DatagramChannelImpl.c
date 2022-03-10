@@ -53,6 +53,8 @@ Java_sun_nio_ch_DatagramChannelImpl_disconnect0(JNIEnv *env, jclass clazz,
 #if defined(__APPLE__)
     // On macOS systems we use disconnectx
     rv = disconnectx(fd, SAE_ASSOCID_ANY, SAE_CONNID_ANY);
+#elif defined(__solaris__)
+    rv = connect(fd, 0, 0);
 #else
     SOCKETADDRESS sa;
     memset(&sa, 0, sizeof(sa));
