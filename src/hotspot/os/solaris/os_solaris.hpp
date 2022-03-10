@@ -160,8 +160,6 @@ class Solaris {
   static void synchronization_init();
   static bool liblgrp_init();
 
-  static void init_signal_mem();
-
   // Allows us to switch between lwp and thread -based synchronization
   static int mutex_lock(mutex_t *mx)    { return _mutex_lock(mx); }
   static int mutex_trylock(mutex_t *mx) { return _mutex_trylock(mx); }
