@@ -1592,6 +1592,37 @@ void os::print_jni_name_suffix_on(outputStream* st, int args_size) {
   // no suffix required
 }
 
+// The following code is moved from os.cpp for making this
+// code platform specific, which it is by its very nature.
+
+// a counter for each possible signal value
+static int Sigexit = 0;
+static jint *pending_signals = NULL;
+static int *preinstalled_sigs = NULL;
+static struct sigaction *chainedsigactions = NULL;
+static Semaphore* sig_sem = NULL;
+
+void os::Solaris::init_signal_mem() {
+  // Initialize signal structures
+  Maxsignum = SIGRTMAX;
+  Sigexit = Maxsignum+1;
+  assert(Maxsignum >0, "Unable to obtain max signal number");
+
+  // Initialize signal structures
+  // pending_signals has one int per signal
+  // The additional signal is for SIGEXIT - exit signal to signal_thread
+  pending_signals = (jint *)os::malloc(sizeof(jint) * (Sigexit+1), mtInternal);
+  memset(pending_signals, 0, (sizeof(jint) * (Sigexit+1)));
+
+  if (UseSignalChaining) {
+    chainedsigactions = (struct sigaction *)malloc(sizeof(struct sigaction)
+                                                   * (Maxsignum + 1), mtInternal);
+    memset(chainedsigactions, 0, (sizeof(struct sigaction) * (Maxsignum + 1)));
+    preinstalled_sigs = (int *)os::malloc(sizeof(int) * (Maxsignum + 1), mtInternal);
+    memset(preinstalled_sigs, 0, (sizeof(int) * (Maxsignum + 1)));
+  }
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 // Virtual Memory
 
@@ -2909,6 +2940,7 @@ jint os::init_2(void) {
     FLAG_SET_ERGO_IF_DEFAULT(UseNUMAInterleaving, true);
   }
 
+  Solaris::init_signal_mem();
   if (PosixSignals::init() == JNI_ERR) {
     return JNI_ERR;
   }
