@@ -438,8 +438,11 @@ JVM_handle_solaris_signal(int sig, siginfo_t* info, void* ucVoid,
     // Handle ALL stack overflow variations here
     if (sig == SIGSEGV && info->si_code == SEGV_ACCERR) {
       address addr = (address) info->si_addr;
-      if (os::Posix::handle_stack_overflow(thread, addr, pc, uc, &stub)) {
-        return 1; // continue
+      if (thread->is_in_full_stack(addr)) {
+        // stack overflow
+        if (os::Posix::handle_stack_overflow(thread, addr, pc, uc, &stub)) {
+          return true; // continue
+        }
       }
     }
 
