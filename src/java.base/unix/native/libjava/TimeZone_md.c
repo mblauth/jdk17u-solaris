@@ -875,8 +875,7 @@ getGMTOffsetID()
         return strdup("GMT");
     }
 
-    sprintf(buf, (const char *)"GMT%c%c%c:%c%c", offset[0], offset[1], offset[2],
-        offset[3], offset[4]);
-#endif
+    sprintf(buf, (const char *)"GMT%c%02d:%02d",
+            sign, (int)(offset/3600), (int)((offset%3600)/60));
     return strdup(buf);
 }
